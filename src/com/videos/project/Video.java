@@ -1,5 +1,6 @@
 package com.videos.project;
 
+import java.sql.Timestamp;
 import java.util.*;
 
 public class Video {
@@ -39,6 +40,7 @@ public class Video {
 	public void setTag(String tag) {
 		this.tag.add(tag);
 	}
+	
 	
 	public String getDatosVideo() {
 		return "Video: [Titulo : " + titulo + ", Url : " + url + 

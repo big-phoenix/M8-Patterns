@@ -1,12 +1,14 @@
 package com.videos.main;
 
-import java.util.HashMap;
+import java.sql.Timestamp;
+import java.util.*;
 
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 import com.videos.interfaces.UsuariosDAO;
 import com.videos.project.*;
+import com.videos.project.Usuario.Estado;
 
 public class DAOPatterVideo {
 
@@ -15,6 +17,30 @@ public class DAOPatterVideo {
 		UsuariosDAO usuariosDAO = new UsuariosDAOImpl();
 		HashMap<Usuario, Video> relacion = new HashMap<Usuario,Video>(); // Guardamos la relacion de Usuario con Video
 		
+		Timer timer = new Timer();
+		TimerTask task = new TimerTask() {
+
+			@Override
+			public void run() {
+				
+				for(Usuario usuario: usuariosDAO.getAllUsuarios()) {
+					
+					if(usuario.getEstado() == Estado.Uploading) {
+						usuario.setEstado(Estado.Verifying);
+					}else if(usuario.getEstado() == Estado.Verifying) {
+						usuario.setEstado(Estado.Public);
+					}
+					
+				}
+				
+			}
+			
+		};
+		
+		timer.schedule(task,10, 3000);
+		
+		
+		
 		usuariosDAO.addUsuario();
 		
 		int dato1 = usuariosDAO.getAllUsuarios().size()-1;
@@ -22,6 +48,21 @@ public class DAOPatterVideo {
 		
 		relacion.put(usuariosDAO.getAllUsuarios().get(dato1), usuariosDAO.getAllVideo().get(dato2));
 		
+		
+		for(Usuario usuario: usuariosDAO.getAllUsuarios()) {
+			System.out.println("Usuario: [Nombre : " + usuario.getNombre() + ", Apellido : " + usuario.getApellido() + 
+					", Fecha de Registro : " + usuario.getFecha_rg() + ", Tiempo : " + usuario.getTimes() + 
+					", Estado : " + usuario.getEstado() + "  ]");
+			
+			System.out.println("-----------------------------------------------------------------------------------");
+			
+		}
+		
+		
+		for(Video video: usuariosDAO.getAllVideo()) {
+			System.out.println("Video: [Titulo : " + video.getTitulo() + ", URL : " + video.getUrl() + 
+					", Tags : " + video.getAllTag() + "  ]");
+		}
 		
 		/***************************************** MAP *****************************************************/
 		
